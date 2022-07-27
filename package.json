@@ -1,0 +1,52 @@
+{
+  "name": "torrent-browse",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "source": "src/index.ts",
+  "exports": {
+    "require": "./dist/torrent-browse.cjs",
+    "default": "./dist/torrent-browse.modern.js"
+  },
+  "main": "./dist/torrent-browse.cjs",
+  "module": "./dist/torrent-browse.module.js",
+  "unpkg": "./dist/torrent-browse.umd.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "microbundle && typedoc src/index.ts",
+    "dev": "microbundle watch",
+    "prettify": "prettier --write \"{src,spec}/**/*.{ts,tsx}\"",
+    "test": "jest spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KiraLT/torrent-browse.git"
+  },
+  "author": "KiraLT",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KiraLT/torrent-browse/issues"
+  },
+  "homepage": "https://github.com/KiraLT/torrent-browse#readme",
+  "dependencies": {
+    "common-stuff": "^1.5.2",
+    "cross-fetch": "^3.1.5",
+    "jssoup": "^0.0.15"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.6",
+    "jest": "^28.1.3",
+    "microbundle": "^0.15.0",
+    "prettier": "^2.7.1",
+    "ts-jest": "^28.0.7",
+    "typedoc": "^0.23.9",
+    "typescript": "^4.7.4"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "jest": {
+    "preset": "ts-jest"
+  }
+}
