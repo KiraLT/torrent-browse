@@ -16,7 +16,6 @@ export interface ProviderItem {
     imdb?: string
     numFiles?: number
     comments?: number
-    provider: string
 }
 
 export interface ProviderCategory {
@@ -29,7 +28,6 @@ export interface ProviderCategory {
 }
 
 export interface ProviderMeta {
-    provider: string
     categories: ProviderCategory[]
 }
 

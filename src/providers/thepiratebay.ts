@@ -35,7 +35,6 @@ export class ThepiratebayProvider implements Provider {
 
     async getMeta(): Promise<ProviderMeta> {
         return {
-            provider: this.name,
             categories: [
                 {
                     name: 'Audio',
@@ -278,7 +277,6 @@ export class ThepiratebayProvider implements Provider {
         ])
 
         return result.map((v) => ({
-            provider: this.name,
             id: v.id,
             name: v.name,
             magnet: formatMagnet(v.info_hash, v.name, this.trackers),

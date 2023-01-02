@@ -50,7 +50,7 @@ async function executeProviders<T>(
 ): Promise<{ items: T[]; errors: ProviderError[] }> {
     const responses = await Promise.all(
         providers.map((v) =>
-            Promise.resolve(callback(v)).catch((err) => ({
+            Promise.resolve(callback(v)).then(data => ({data})).catch((err) => ({
                 error: err instanceof Error ? err.message : String(err),
                 provider: v.name,
             }))
@@ -58,7 +58,7 @@ async function executeProviders<T>(
     )
 
     return {
-        items: responses.filter((v): v is Awaited<T> => !('error' in v)),
+        items: responses.filter((v): v is {data: Awaited<T>} => v && !('error' in v)).map(v => v.data),
         errors: responses.filter((v): v is ProviderError => 'error' in v),
     }
 }

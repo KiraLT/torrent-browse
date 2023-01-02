@@ -14,7 +14,8 @@
         "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
         "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
         "noUncheckedIndexedAccess": true, /* Turning on noUncheckedIndexedAccess will add undefined to any un-declared field in the type. */
-        "declaration": true
+        "declaration": true,
+        "esModuleInterop": true
     },
     "include": [
         "src/**/*"
