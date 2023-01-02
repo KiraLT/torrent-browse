@@ -1,5 +1,7 @@
-import fetch from 'cross-fetch'
+import fetchPonyfill from 'fetch-ponyfill'
 import { parseHtml, DOMElement } from './dom'
+
+const { fetch } = fetchPonyfill()
 
 export async function fetchText(url: string): Promise<string> {
     return fetch(url, {
