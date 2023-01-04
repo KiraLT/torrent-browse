@@ -8,3 +8,4 @@
 Torrents discovery library for both NodeJS & browser.
 
 Read [Documentation 📘](https://kiralt.github.io/torrent-browse/)
+Check [Demo 🎁](https://kiralt.github.io/torrent-browse/demo/)

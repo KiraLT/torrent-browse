@@ -1,5 +1,5 @@
-const JSSoup = require('jssoup').default
-const SoupSelector = require('jssoup-selector').default
+import JSSoup from 'jssoup'
+import SoupSelector from 'jssoup-selector'
 
 class JSSoupAdapter {
 
@@ -39,16 +39,17 @@ class JSSoupAdapter {
 }
 
 export class DOMElement {
+    /** @hidden */
     protected selector = new SoupSelector(new JSSoupAdapter())
 
-    constructor(public soup: any) {}
+    constructor(public soup: JSSoup) {}
 
     find(selector: string): DOMElement | undefined {
         return this.findAll(selector)[0]
     }
 
     findAll(selector: string): DOMElement[] {
-        return this.selector.select(selector, this.soup).map((v: any) => new DOMElement(v))
+        return this.selector.select(selector, this.soup).map(v => new DOMElement(v))
     }
 
     get previousElement(): DOMElement | undefined {
@@ -72,10 +73,10 @@ export class DOMElement {
     }
 
     get children(): DOMElement[] {
-        return this.soup.contents.map((v: any) => new DOMElement(v))
+        return this.soup.contents.map(v => new DOMElement(v))
     }
 }
 
-export function parseHtml(html: String): DOMElement {
+export function parseHtml(html: string): DOMElement {
     return new DOMElement(new JSSoup(html))
 }
