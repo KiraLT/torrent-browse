@@ -8,4 +8,13 @@
 Torrents discovery library for both NodeJS & browser.
 
 Read [Documentation 📘](https://kiralt.github.io/torrent-browse/)
+
 Check [Demo 🎁](https://kiralt.github.io/torrent-browse/demo/)
+
+## 
+
+## Browser VS Node
+
+This library works in both NodeJS and the browser. However some default providers may not work in the browser due to browser limitations. 
+
+> Due to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) limitation browser can't fetch data from different domain. To get around that in the browser library uses free proxy servers. However they do not support custom headers and other things to get around website protections (like [cloudflare](https://www.cloudflare.com/)).
