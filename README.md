@@ -11,7 +11,49 @@ Read [Documentation 📘](https://kiralt.github.io/torrent-browse/)
 
 Check [Demo 🎁](https://kiralt.github.io/torrent-browse/demo/)
 
-## 
+
+## Installation
+
+[![npm version](https://badge.fury.io/js/torrent-browse.svg)](https://www.npmjs.com/package/torrent-browse)
+[![npm](https://img.shields.io/npm/dt/torrent-browse)](https://www.npmjs.com/package/torrent-browse)
+
+### Install with NPM/yarn:
+
+```bash
+# NPM
+npm install torrent-browse
+# Yarn
+yarn add torrent-browse
+```
+
+Import what you need:
+
+```typescript
+import { search, defaultProviders } from 'common-stuff'
+
+search(
+    defaultProviders,
+    'harry potter'
+).then(result => {
+    console.log(result)
+})
+```
+
+## Load directly in the browser
+
+Include script from CDN and use `torrentBrowse` global variable:
+
+```html
+<script src="https://unpkg.com/torrent-browse"></script>
+<script>
+    torrentBrowse.search(
+        torrentBrowse.defaultProviders,
+        'harry potter'
+    ).then(result => {
+        console.log(result)
+    })
+</script>
+```
 
 ## Browser VS Node
 
