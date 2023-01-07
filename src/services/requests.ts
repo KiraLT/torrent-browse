@@ -1,18 +1,28 @@
 import fetchPonyfill from 'fetch-ponyfill'
+import { shuffle } from 'common-stuff'
+
 import { parseHtml, DOMElement } from './dom'
 import { isInBrowser } from './utils'
 
 const { fetch } = fetchPonyfill()
 
 async function fetchBrowser(url: string): Promise<string> {
-    const proxies: Array<(v: string) => string> = [
-        v => `https://cors-anywhere.herokuapp.com/${v}`,
-    ]
+    const proxies = shuffle<(v: string) => string>([
+        v => `https://api.allorigins.win/raw?url=${encodeURIComponent(v)}`,
+        v => `https://corsproxy.io/?${encodeURIComponent(v)}`,
+        v => `https://proxy.cors.sh/${v}`,
+    ])
     const proxyUrls = proxies.map(v => v(url))
 
     const retry = async (url: string, proxies: string[]): Promise<string> => {
         return fetch(url)
-            .then(v => v.text())
+            .then(v => {
+                if (!v.ok) {
+                    throw new Error(`Proxy or API returned ${v.status} status code`)
+                }
+
+                return v.text()
+            })
             .catch(err => {
                 const nextUrl = proxies.pop()
 

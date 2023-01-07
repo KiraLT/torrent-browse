@@ -1,4 +1,4 @@
-import { generateQueryString } from 'common-stuff'
+import { generateQueryString, parseSize } from 'common-stuff'
 import { Provider, ProviderItem, ProviderMeta, ProviderSearchOptions } from '../provider'
 import { fetchHtml } from '../services/requests'
 
@@ -15,15 +15,15 @@ export class NyaaProvider implements Provider {
                     id: '1_0',
                     subcategories: [
                         {
-                            name: 'AMV',
+                            name: 'Anime Music Video',
                             id: '1_1',
                         },
                         {
-                            name: 'English',
+                            name: 'English-translated',
                             id: '1_2',
                         },
                         {
-                            name: 'Non-English',
+                            name: 'Non-English-translated',
                             id: '1_3',
                         },
                         {
@@ -51,11 +51,11 @@ export class NyaaProvider implements Provider {
                     id: '3_0',
                     subcategories: [
                         {
-                            name: 'Literature - English',
+                            name: 'Literature - English-translated',
                             id: '3_1',
                         },
                         {
-                            name: 'Literature - Non-English',
+                            name: 'Literature - Non-English-translated',
                             id: '3_2',
                         },
                         {
@@ -69,15 +69,15 @@ export class NyaaProvider implements Provider {
                     id: '4_0',
                     subcategories: [
                         {
-                            name: 'Live Action - English',
+                            name: 'Live Action - English-translated',
                             id: '4_1',
                         },
                         {
-                            name: 'Live Action - Idol/PV',
+                            name: 'Live Action - Idol/Promotional Video',
                             id: '4_2',
                         },
                         {
-                            name: 'Live Action - Non-English',
+                            name: 'Live Action - Non-English-translated',
                             id: '4_3',
                         },
                         {
@@ -105,7 +105,7 @@ export class NyaaProvider implements Provider {
                     id: '6_0',
                     subcategories: [
                         {
-                            name: 'Software - Apps',
+                            name: 'Software - Applications',
                             id: '6_1',
                         },
                         {
@@ -122,7 +122,7 @@ export class NyaaProvider implements Provider {
         query: string,
         options?: ProviderSearchOptions
     ): Promise<ProviderItem[]> {
-        const { category, limit } = options || {}
+        const { category } = options || {}
 
         const url = `${this.domain}?${generateQueryString({
             q: query,
@@ -130,14 +130,25 @@ export class NyaaProvider implements Provider {
         })}`
 
         const dom = await fetchHtml(url)
-        return dom.findAll('.torrent-list > tbody > tr')
+        return dom.findAll('tbody > tr')
             .map((el) => {
+                const cols = el.findAll('td')
+
+                const titleA = cols[1]?.findAll('a').filter(v => !('class' in v.attrs))[0]
+                const categoryA = cols[0]?.find('a')
                 return {
-                    id: '',
-                    name: '',
-                    seeds: 0,
-                    peers: 0,
-                    size: ''
+                    id: titleA?.attrs.href?.replace('/view/', '') ?? '',
+                    link: titleA?.attrs.href ?? '',
+                    name: titleA?.text.trim() ?? '',
+                    seeds: parseInt(cols[5]?.text ?? '', 10) || 0,
+                    peers: parseInt(cols[6]?.text ?? '', 10) || 0,
+                    size: Math.max(parseSize(cols[3]?.text ?? ''), 0),
+                    date: Date.parse(cols[5]?.text ?? '') || undefined,
+                    commentsCount: parseInt(cols[1]?.find('.comments')?.text ?? '', 10) || undefined,
+                    category: categoryA ? {
+                        id: categoryA.attrs.href?.replace('/?c=', '') ?? '',
+                        name: categoryA.attrs?.title ?? ''
+                    } : undefined
                 }
             })
     }

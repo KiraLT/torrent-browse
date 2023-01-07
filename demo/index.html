@@ -68,14 +68,22 @@
             <table class="table table-striped">
               <thead>
                 <tr>
+                  <th scope="col">Provider</th>
                   <th scope="col">Category</th>
                   <th scope="col">Name</th>
+                  <th scope="col">Seeds<small class="text-muted"> / </small>Peers</th>
                 </tr>
               </thead>
               <tbody>
                 {items.map(item => <tr>
-                  <td>{item.category.name}</td>
-                  <td><a href={item.link} target="_blank">{item.name}</a></td>
+                  <td>{item.provider}</td>
+                  <td>{item.data.category.name}</td>
+                  <td><a href={item.data.link} target="_blank">{item.data.name}</a></td>
+                  <td>
+                    <span class="text-success">{item.data.seeds}</span>
+                    <small class="text-muted"> / </small>
+                    <span class="text-danger">{item.data.peers}</span>
+                  </td>
                 </tr>)}
               </tbody>
             </table>  

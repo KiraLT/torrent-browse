@@ -3,7 +3,7 @@ import { Provider, ProviderItem, ProviderMeta, ProviderSearchOptions } from '../
 import { fetchJson } from '../services/requests'
 import { formatMagnet } from '../services/torrent'
 
-interface ThepiratebayItem {
+interface ThePirateBayItem {
     id: string
     name: string
     info_hash: string
@@ -18,7 +18,7 @@ interface ThepiratebayItem {
     imdb: string
 }
 
-export class ThepiratebayProvider implements Provider {
+export class ThePirateBayProvider implements Provider {
     name = 'ThePirateBay'
 
     protected domain = 'https://apibay.org'
@@ -256,20 +256,20 @@ export class ThepiratebayProvider implements Provider {
         query: string,
         options?: ProviderSearchOptions
     ): Promise<ProviderItem[]> {
-        const { category, limit } = options || {}
+        const { category } = options || {}
 
         const url = `${this.domain}/q.php?q=${encodeURIComponent(
             query
         )}&cat=${encodeURIComponent(category || '')}`
 
-        const result = await fetchJson<ThepiratebayItem[]>(url)
+        const result = await fetchJson<ThePirateBayItem[]>(url)
 
         if (result[0]?.name === 'No results returned') {
             return []
         }
 
         const categories = (await this.getMeta()).categories.flatMap((v) => [
-            ...v.subcategories,
+            ...v.subcategories ?? [],
             {
                 id: v.id,
                 name: v.name,
@@ -282,15 +282,13 @@ export class ThepiratebayProvider implements Provider {
             magnet: formatMagnet(v.info_hash, v.name, this.trackers),
             seeds: parseInt(v.seeders, 10),
             peers: parseInt(v.leechers, 10),
-            size: formatBytes(parseInt(v.size, 10)),
-            time: new Date(parseInt(v.added) * 1000).getTime(),
+            size: parseInt(v.size, 10),
+            date: parseInt(v.added, 10) || 0,
             category: categories.find((c) => c.id === v.category) || {
                 name: 'All',
                 id: '',
             },
-            numFiles: parseInt(v.num_files),
-            isVip: v.status === 'vip',
-            imdb: v.imdb,
+            filesCount: parseInt(v.num_files, 10) || 0,
             link: `https://thepiratebay.org/description.php?id=${v.id}`,
         }))
     }

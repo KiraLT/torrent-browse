@@ -5,6 +5,7 @@ import {
     ProviderItem,
 } from '../provider'
 import { fetchHtml } from '../services/requests'
+import { parseSize } from 'common-stuff'
 
 export class X1337Provider implements Provider {
     name = '1337x'
@@ -76,7 +77,7 @@ export class X1337Provider implements Provider {
         query: string,
         options?: ProviderSearchOptions
     ): Promise<ProviderItem[]> {
-        const { category, limit } = options || {}
+        const { category } = options || {}
 
         const url = category
             ? `${this.domain}/category-search/${encodeURIComponent(
@@ -96,12 +97,12 @@ export class X1337Provider implements Provider {
                     name: el.findAll('a')[1]?.text?.trim() ?? '',
                     seeds: parseInt(el.find('.seeds')?.text?.trim() ?? '', 10) || 0,
                     peers: parseInt(el.find('.leeches')?.text?.trim() ?? '', 10) || 0,
-                    comments:
+                    commentsCount:
                         parseInt(el.find('.comments')?.text?.trim() ?? '', 10) || 0,
-                    size: el.find('.size')?.children[0]?.soup?._text?.trim() ?? '',
-                    time: this.parseDate(
+                    size: Math.max(parseSize(el.find('.size')?.children[0]?.soup?._text?.trim() ?? ''), 0),
+                    date: this.parseDate(
                         el.find('.coll-date')?.text?.trim() ?? ''
-                    ).getTime(),
+                    ).getTime() || undefined,
                     link: this.domain + el.findAll('a')[1]?.attrs.href ?? '',
                 }
             })

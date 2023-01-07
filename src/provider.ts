@@ -1,27 +1,25 @@
 export interface ProviderItem {
     id: string
     name: string
-    magnet?: string
     seeds: number
     peers: number
-    size: string
-    time?: number
+    size: number
+    link?: string
+    date?: number
+    magnet?: string
     downloads?: number
     category?: {
         id: string
         name: string
     }
-    link?: string
-    isVip?: boolean
-    imdb?: string
-    numFiles?: number
-    comments?: number
+    filesCount?: number
+    commentsCount?: number
 }
 
 export interface ProviderCategory {
     name: string
     id: string
-    subcategories: {
+    subcategories?: {
         name: string
         id: string
     }[]
@@ -32,10 +30,15 @@ export interface ProviderMeta {
 }
 
 export interface ProviderSearchOptions {
+    /**
+     * Category ID to filter by
+     */
     category?: string
-    limit?: number
 }
 
+/**
+ * Base provider interface that all providers must follow
+ */
 export interface Provider {
     name: string
 
