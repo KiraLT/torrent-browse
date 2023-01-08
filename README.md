@@ -11,7 +11,6 @@ Read [Documentation 📘](https://kiralt.github.io/torrent-browse/)
 
 Check [Demo 🎁](https://kiralt.github.io/torrent-browse/demo/)
 
-
 ## Installation
 
 [![npm version](https://badge.fury.io/js/torrent-browse.svg)](https://www.npmjs.com/package/torrent-browse)
@@ -29,7 +28,7 @@ yarn add torrent-browse
 Import what you need:
 
 ```typescript
-import { search, defaultProviders } from 'common-stuff'
+import { search, defaultProviders } from 'torrent-browse'
 
 search(
     defaultProviders,
