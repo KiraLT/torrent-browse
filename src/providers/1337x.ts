@@ -99,7 +99,7 @@ export class X1337Provider implements Provider {
                     peers: parseInt(el.find('.leeches')?.text?.trim() ?? '', 10) || 0,
                     commentsCount:
                         parseInt(el.find('.comments')?.text?.trim() ?? '', 10) || 0,
-                    size: Math.max(parseSize(el.find('.size')?.children[0]?.soup?._text?.trim() ?? ''), 0),
+                    size: Math.max(parseSize(el.find('.size')?.text || ''), 0),
                     date: this.parseDate(
                         el.find('.coll-date')?.text?.trim() ?? ''
                     ).getTime() || undefined,

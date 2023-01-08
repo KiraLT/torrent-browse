@@ -1,7 +1,7 @@
 import fetchPonyfill from 'fetch-ponyfill'
 import { shuffle } from 'common-stuff'
+import { parseHTML, IsomorphicHTMLElement } from 'isomorphic-htmlparser'
 
-import { parseHtml, DOMElement } from './dom'
 import { isInBrowser } from './utils'
 
 const { fetch } = fetchPonyfill()
@@ -56,6 +56,6 @@ export async function fetchJson<T = unknown>(url: string): Promise<T> {
     return JSON.parse(await fetchText(url))
 }
 
-export async function fetchHtml(url: string): Promise<DOMElement> {
-    return parseHtml(await fetchText(url))
+export async function fetchHtml(url: string): Promise<IsomorphicHTMLElement> {
+    return parseHTML(await fetchText(url))
 }

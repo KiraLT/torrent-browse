@@ -2,6 +2,17 @@
   "name": "torrent-browse",
   "version": "1.0.0",
   "description": "Torrent search library for both nodejs and javascript",
+  "keywords": [
+    "torrent",
+    "search",
+    "typescript",
+    "api",
+    "browser",
+    "isomorphic",
+    "nyaa",
+    "thepiratebay",
+    "1337x"
+  ],
   "type": "module",
   "source": "src/index.ts",
   "exports": {
@@ -34,8 +45,7 @@
   "dependencies": {
     "common-stuff": "^1.6.4",
     "fetch-ponyfill": "^7.1.0",
-    "jssoup": "^0.0.15",
-    "jssoup-selector": "^0.0.1"
+    "isomorphic-htmlparser": "^1.0.1"
   },
   "devDependencies": {
     "@types/jest": "^29.2.5",
