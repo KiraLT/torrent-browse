@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/KiraLT/torrent-browse/compare/v1.0.0...v1.0.1) (2023-01-08)
+
+
+### Bug Fixes
+
+* README fix ([8c9b227](https://github.com/KiraLT/torrent-browse/commit/8c9b227dd245b499eba96baa365d15d2bcfda18e))
+
 # 1.0.0 (2023-01-08)
 
 
