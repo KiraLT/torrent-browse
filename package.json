@@ -1,6 +1,6 @@
 {
   "name": "torrent-browse",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Torrent search library for both nodejs and javascript",
   "keywords": [
     "torrent",
