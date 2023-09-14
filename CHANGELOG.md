@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/KiraLT/torrent-browse/compare/v1.0.1...v1.0.2) (2023-09-14)
+
+
+### Bug Fixes
+
+* update cors proxy list when running in the browser ([22333aa](https://github.com/KiraLT/torrent-browse/commit/22333aa2a4d8060fbace248925cc787221d810c0))
+
 ## [1.0.1](https://github.com/KiraLT/torrent-browse/compare/v1.0.0...v1.0.1) (2023-01-08)
 
 
