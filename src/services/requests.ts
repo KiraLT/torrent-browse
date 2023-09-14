@@ -9,8 +9,7 @@ const { fetch } = fetchPonyfill()
 async function fetchBrowser(url: string): Promise<string> {
     const proxies = shuffle<(v: string) => string>([
         v => `https://api.allorigins.win/raw?url=${encodeURIComponent(v)}`,
-        v => `https://corsproxy.io/?${encodeURIComponent(v)}`,
-        v => `https://proxy.cors.sh/${v}`,
+        v => `https://proxy.torrent-browse.workers.dev/?url=${encodeURIComponent(v)}`
     ])
     const proxyUrls = proxies.map(v => v(url))
 
