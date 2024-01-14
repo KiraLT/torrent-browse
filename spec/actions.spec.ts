@@ -2,24 +2,24 @@ import { search, Provider, getMeta } from '../src'
 
 const item1 = {
     id: '1',
-    name: 'Harry Potter and the Philosopher\'s Stone 2001 BDRip 720p',
+    name: "Harry Potter and the Philosopher's Stone 2001 BDRip 720p",
     seeds: 40,
     peers: 2,
-    size: 10000
+    size: 10000,
 }
 const item2 = {
     id: '2',
     name: 'Harry Potter and the Chamber of Secrets (2002) 1080p BrRip x264',
     seeds: 2,
     peers: 2,
-    size: 10000
+    size: 10000,
 }
 const item3 = {
     id: '1',
     name: 'Harry Potter and the Prisoner of Azkaban (2004) 1080p 550MB- YIFY',
     seeds: 4,
     peers: 2,
-    size: 10000
+    size: 10000,
 }
 
 const providers: Provider[] = [
@@ -31,8 +31,8 @@ const providers: Provider[] = [
                     {
                         name: 'Cat1',
                         id: 'ID1',
-                    }
-                ]
+                    },
+                ],
             }
         },
         async search(query: string) {
@@ -40,7 +40,7 @@ const providers: Provider[] = [
                 throw new Error('Error 1')
             }
             return [item2, item1]
-        }
+        },
     },
     {
         name: 'provider2',
@@ -50,8 +50,8 @@ const providers: Provider[] = [
                     {
                         name: 'Cat2',
                         id: 'ID2',
-                    }
-                ]
+                    },
+                ],
             }
         },
         async search(query: string) {
@@ -59,9 +59,9 @@ const providers: Provider[] = [
                 throw new Error('Error 2')
             }
             return [item3]
-        }
-    }
-] 
+        },
+    },
+]
 
 describe('search', () => {
     it('ranks results by seeds', async () => {
@@ -70,10 +70,10 @@ describe('search', () => {
         expect(result).toEqual({
             errors: [],
             items: [
-                {provider: 'provider1', data: item1},
-                {provider: 'provider2', data: item3},
-                {provider: 'provider1', data: item2}
-            ]
+                { provider: 'provider1', data: item1 },
+                { provider: 'provider2', data: item3 },
+                { provider: 'provider1', data: item2 },
+            ],
         })
     })
 
@@ -83,10 +83,10 @@ describe('search', () => {
         expect(result).toEqual({
             errors: [],
             items: [
-                {provider: 'provider2', data: item3},
-                {provider: 'provider1', data: item2},
-                {provider: 'provider1', data: item1}
-            ]
+                { provider: 'provider2', data: item3 },
+                { provider: 'provider1', data: item2 },
+                { provider: 'provider1', data: item1 },
+            ],
         })
     })
 
@@ -96,14 +96,14 @@ describe('search', () => {
         expect(result).toEqual({
             errors: [
                 {
-                    "error": "Error 2",
-                    "provider": "provider2"
-                }
+                    error: 'Error 2',
+                    provider: 'provider2',
+                },
             ],
             items: [
-                {provider: 'provider1', data: item1},
-                {provider: 'provider1', data: item2}
-            ]
+                { provider: 'provider1', data: item1 },
+                { provider: 'provider1', data: item2 },
+            ],
         })
     })
 })
@@ -122,9 +122,9 @@ describe('getMeta', () => {
                             {
                                 name: 'Cat1',
                                 id: 'ID1',
-                            }
-                        ]
-                    }
+                            },
+                        ],
+                    },
                 },
                 {
                     provider: 'provider2',
@@ -133,11 +133,11 @@ describe('getMeta', () => {
                             {
                                 name: 'Cat2',
                                 id: 'ID2',
-                            }
-                        ]
-                    }
-                }
-            ]
+                            },
+                        ],
+                    },
+                },
+            ],
         })
     })
 })
