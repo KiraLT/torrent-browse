@@ -1,14 +1,10 @@
-import { generateQueryString, parseSize } from 'common-stuff'
-import { Provider, ProviderItem, ProviderMeta, ProviderSearchOptions } from '../provider'
-import { fetchHtml } from '../services/requests'
+import { generateQueryString } from 'common-stuff'
+import { CrawlProvider } from '../provider'
 
-export class NyaaProvider implements Provider {
-    name = 'Nyaa'
-
-    protected domain = 'https://nyaa.si/'
-
-    async getMeta(): Promise<ProviderMeta> {
-        return {
+export class NyaaProvider extends CrawlProvider {
+    constructor() {
+        super({
+            name: 'Nyaa',
             categories: [
                 {
                     name: 'Anime',
@@ -114,42 +110,24 @@ export class NyaaProvider implements Provider {
                         },
                     ],
                 },
-            ]
-        }
-    }
-
-    async search(
-        query: string,
-        options?: ProviderSearchOptions
-    ): Promise<ProviderItem[]> {
-        const { category } = options || {}
-
-        const url = `${this.domain}?${generateQueryString({
-            q: query,
-            c: category
-        })}`
-
-        const dom = await fetchHtml(url)
-        return dom.findAll('tbody > tr')
-            .map((el) => {
-                const cols = el.findAll('td')
-
-                const titleA = cols[1]?.findAll('a').filter(v => !('class' in v.attrs))[0]
-                const categoryA = cols[0]?.find('a')
-                return {
-                    id: titleA?.attrs.href?.replace('/view/', '') ?? '',
-                    link: titleA?.attrs.href ?? '',
-                    name: titleA?.text.trim() ?? '',
-                    seeds: parseInt(cols[5]?.text ?? '', 10) || 0,
-                    peers: parseInt(cols[6]?.text ?? '', 10) || 0,
-                    size: Math.max(parseSize(cols[3]?.text ?? ''), 0),
-                    date: Date.parse(cols[5]?.text ?? '') || undefined,
-                    commentsCount: parseInt(cols[1]?.find('.comments')?.text ?? '', 10) || undefined,
-                    category: categoryA ? {
-                        id: categoryA.attrs.href?.replace('/?c=', '') ?? '',
-                        name: categoryA.attrs?.title ?? ''
-                    } : undefined
-                }
-            })
+            ],
+            itemsSelector: 'tbody > tr',
+            itemSelectors: {
+                id: 'td:nth-child(2) a:not(.comments) @ attrs.href | slice:6',
+                link: 'td:nth-child(2) a:not(.comments) @ attrs.href',
+                name: 'td:nth-child(2) a:not(.comments) @ attrs.title',
+                seeds: 'td:nth-child(6) @ text | parseInt',
+                peers: 'td:nth-child(7) @ text | parseInt',
+                size: 'td:nth-child(4) @ text | parseSize',
+                magnet: 'td:nth-child(3) a:nth-child(2) @ attrs.href',
+                date: 'td:nth-child(5) @ attrs.data-timestamp | parseInt',
+                downloads: 'td:nth-child(8) @ text | parseInt',
+            },
+            searchUrl: ({ query, category }) =>
+                `https://nyaa.si/?${generateQueryString({
+                    q: query,
+                    c: category,
+                })}`,
+        })
     }
 }

@@ -8,27 +8,32 @@ const { fetch } = fetchPonyfill()
 
 async function fetchBrowser(url: string): Promise<string> {
     const proxies = shuffle<(v: string) => string>([
-        v => `https://api.allorigins.win/raw?url=${encodeURIComponent(v)}`,
-        v => `https://proxy.torrent-browse.workers.dev/?url=${encodeURIComponent(v)}`
+        (v) => `https://api.allorigins.win/raw?url=${encodeURIComponent(v)}`,
+        (v) =>
+            `https://proxy.torrent-browse.workers.dev/?url=${encodeURIComponent(
+                v,
+            )}`,
     ])
-    const proxyUrls = proxies.map(v => v(url))
+    const proxyUrls = proxies.map((v) => v(url))
 
     const retry = async (url: string, proxies: string[]): Promise<string> => {
         return fetch(url)
-            .then(v => {
+            .then((v) => {
                 if (!v.ok) {
-                    throw new Error(`Proxy or API returned ${v.status} status code`)
+                    throw new Error(
+                        `Proxy or API returned ${v.status} status code`,
+                    )
                 }
 
                 return v.text()
             })
-            .catch(err => {
+            .catch((err) => {
                 const nextUrl = proxies.pop()
 
                 if (nextUrl) {
                     return retry(nextUrl, proxies)
                 }
-    
+
                 return Promise.reject(err)
             })
     }
@@ -39,9 +44,9 @@ async function fetchBrowser(url: string): Promise<string> {
 async function fetchNode(url: string): Promise<string> {
     return fetch(url, {
         headers: {
-            'User-Agent': `torrent-browse (+https://github.com/KiraLT/torrent-browse)`
-        }
-    }).then(v => v.text())
+            'User-Agent': `torrent-browse (+https://github.com/KiraLT/torrent-browse)`,
+        },
+    }).then((v) => v.text())
 }
 
 export async function fetchText(url: string): Promise<string> {

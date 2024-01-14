@@ -11,7 +11,5 @@ export const defaultProviders = [
     new ThePirateBayProvider(),
     new NyaaProvider(),
     // These providers does not work in the browser
-    ...(!isInBrowser ? [
-        new X1337Provider(),
-    ] : [])
+    ...(!isInBrowser ? [new X1337Provider()] : []),
 ]

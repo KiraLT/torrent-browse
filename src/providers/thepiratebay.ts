@@ -1,5 +1,9 @@
-import { formatBytes } from 'common-stuff'
-import { Provider, ProviderItem, ProviderMeta, ProviderSearchOptions } from '../provider'
+import {
+    Provider,
+    ProviderItem,
+    ProviderMeta,
+    ProviderSearchOptions,
+} from '../provider'
 import { fetchJson } from '../services/requests'
 import { formatMagnet } from '../services/torrent'
 
@@ -254,12 +258,12 @@ export class ThePirateBayProvider implements Provider {
 
     async search(
         query: string,
-        options?: ProviderSearchOptions
+        options?: ProviderSearchOptions,
     ): Promise<ProviderItem[]> {
         const { category } = options || {}
 
         const url = `${this.domain}/q.php?q=${encodeURIComponent(
-            query
+            query,
         )}&cat=${encodeURIComponent(category || '')}`
 
         const result = await fetchJson<ThePirateBayItem[]>(url)
@@ -269,7 +273,7 @@ export class ThePirateBayProvider implements Provider {
         }
 
         const categories = (await this.getMeta()).categories.flatMap((v) => [
-            ...v.subcategories ?? [],
+            ...(v.subcategories ?? []),
             {
                 id: v.id,
                 name: v.name,

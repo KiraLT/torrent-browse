@@ -1,1 +1,2 @@
-export const isInBrowser = typeof window === 'object' && typeof document === 'object'
+export const isInBrowser =
+    typeof window === 'object' && typeof document === 'object'

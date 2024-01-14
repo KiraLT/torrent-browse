@@ -1,15 +1,13 @@
 import {
-    Provider,
+    CrawlProvider,
     ProviderSearchOptions,
     ProviderMeta,
     ProviderItem,
 } from '../provider'
 import { fetchHtml } from '../services/requests'
-import { parseSize } from 'common-stuff'
+import { generateQueryString, parseSize } from 'common-stuff'
 
-export class X1337Provider implements Provider {
-    name = '1337x'
-
+export class X1337Provider extends CrawlProvider {
     protected domain: string = 'https://www.1337x.to'
     protected trackers = [
         'udp://tracker.coppersurfer.tk:6969/announce',
@@ -21,91 +19,66 @@ export class X1337Provider implements Provider {
         'udp://tracker.cyberia.is:6969/announce',
     ]
 
-    async getMeta(): Promise<ProviderMeta> {
-        return {
+    constructor() {
+        super({
+            name: '1337x',
             categories: [
                 {
                     name: 'Movies',
                     id: 'Movies',
-                    subcategories: [],
                 },
                 {
                     name: 'TV',
                     id: 'TV',
-                    subcategories: [],
                 },
                 {
                     name: 'Games',
                     id: 'Games',
-                    subcategories: [],
                 },
                 {
                     name: 'Music',
                     id: 'Music',
-                    subcategories: [],
                 },
                 {
                     name: 'Anime',
                     id: 'Anime',
-                    subcategories: [],
                 },
                 {
                     name: 'Apps',
                     id: 'Apps',
-                    subcategories: [],
                 },
                 {
                     name: 'Documentaries',
                     id: 'Documentaries',
-                    subcategories: [],
                 },
                 {
                     name: 'XXX',
                     id: 'XXX',
-                    subcategories: [],
                 },
                 {
                     name: 'Other',
                     id: 'Other',
-                    subcategories: [],
                 },
             ],
-        }
-    }
-
-    async search(
-        query: string,
-        options?: ProviderSearchOptions
-    ): Promise<ProviderItem[]> {
-        const { category } = options || {}
-
-        const url = category
-            ? `${this.domain}/category-search/${encodeURIComponent(
-                  query
-              )}/${encodeURIComponent(category || '')}/1/`
-            : `${this.domain}/search/${encodeURIComponent(query)}/1/`
-
-        const dom = await fetchHtml(url)
-        return dom.findAll('tbody > tr')
-            .map((el) => {
-                const id =
-                    (el.findAll('a')[1]?.attrs.href || '').split(
-                        '/'
-                    )[2] || ''
-                return {
-                    id,
-                    name: el.findAll('a')[1]?.text?.trim() ?? '',
-                    seeds: parseInt(el.find('.seeds')?.text?.trim() ?? '', 10) || 0,
-                    peers: parseInt(el.find('.leeches')?.text?.trim() ?? '', 10) || 0,
-                    commentsCount:
-                        parseInt(el.find('.comments')?.text?.trim() ?? '', 10) || 0,
-                    size: Math.max(parseSize(el.find('.size')?.text || ''), 0),
-                    date: this.parseDate(
-                        el.find('.coll-date')?.text?.trim() ?? ''
-                    ).getTime() || undefined,
-                    link: this.domain + el.findAll('a')[1]?.attrs.href ?? '',
-                }
-            })
+            itemsSelector: 'tbody > tr',
+            itemSelectors: {
+                id: '.name a:nth-child(2) @ attrs.href | slice:9,16',
+                link: '.name a:nth-child(2) @ attrs.href',
+                name: '.name a:nth-child(2) @ text',
+                seeds: '.seeds @ text | parseInt',
+                peers: '.leeches @ text | parseInt',
+                size: '.size @ text | parseSize',
+                date: '.coll-date @ text | parseDate',
+                commentsCount: '.comments @ text | parseInt'
+            },
+            searchUrl: ({ query, category }) => {
+                return category
+                    ? `${this.domain}/category-search/${encodeURIComponent(
+                          query,
+                      )}/${encodeURIComponent(category || '')}/1/`
+                    : `${this.domain}/search/${encodeURIComponent(query)}/1/`
+            },
+        })
     }
 
     async getMagnet(id: string): Promise<string> {
@@ -128,7 +101,7 @@ export class X1337Provider implements Provider {
                 .replace(`'`, '20')
                 .replace('th', '')
                 .replace('st', '')
-                .replace('rd', '')
+                .replace('rd', ''),
         )
     }
 }
